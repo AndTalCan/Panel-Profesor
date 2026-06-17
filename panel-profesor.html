@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel del Profesor — Marbury v. Madison</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Nunito:wght@600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:#1A1035;color:white;padding:1rem;min-height:100vh}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem}
+.logo{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:900;color:#FFD700}
+.logo span{color:white}
+.lsub{font-size:11px;color:rgba(255,255,255,.35);margin-top:1px}
+.hbtns{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}
+.hbtn{padding:6px 13px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;border:1px solid}
+.hbtn.ref{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:white}
+.hbtn.ref:hover{background:rgba(255,255,255,.18)}
+.hbtn.rst{background:rgba(255,60,60,.12);border-color:rgba(255,60,60,.32);color:#FF9090}
+.hbtn.rst:hover{background:rgba(255,60,60,.25)}
+.live{display:flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;background:#7BFF5E;animation:p 1.5s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.2}}
+.lv{font-size:12px;color:#7BFF5E;font-weight:700}
+
+/* RUBRIC LEGEND */
+.rubric-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.9rem}
+.rl{border-radius:8px;padding:.6rem .8rem;text-align:center;font-size:11px;font-weight:700;border:1px solid}
+.rl.gold{background:rgba(255,215,0,.1);border-color:rgba(255,215,0,.3);color:#FFD700}
+.rl.silver{background:rgba(200,200,200,.1);border-color:rgba(200,200,200,.3);color:#C0C0C0}
+.rl.none{background:rgba(255,51,85,.08);border-color:rgba(255,51,85,.3);color:#FF9090}
+.rl .pts{font-size:18px;font-weight:900;display:block;margin-bottom:2px}
+
+/* STATUS BAR */
+.statusbar{background:rgba(255,255,255,.06);border-radius:10px;padding:.7rem 1rem;margin-bottom:.9rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+.sb-item{text-align:center}
+.sb-val{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:900;line-height:1}
+.sb-lbl{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px}
+.sb-val.gold{color:#FFD700}
+
+.stl{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:rgba(255,255,255,.38);letter-spacing:.07em;margin-bottom:.55rem}
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+@media(min-width:520px){.gg{grid-template-columns:repeat(3,1fr)}}
+
+.gc{background:rgba(255,255,255,.06);border-radius:12px;padding:.85rem;border:1.5px solid rgba(255,255,255,.07);transition:all .4s}
+.gc.done-gold{border-color:rgba(255,215,0,.5);background:rgba(255,215,0,.06)}
+.gc.done-silver{border-color:rgba(200,200,200,.4);background:rgba(200,200,200,.04)}
+.gc.done-none{border-color:rgba(255,51,85,.4);background:rgba(255,51,85,.04)}
+.gn{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:.04em;color:rgba(255,255,255,.38);margin-bottom:.3rem}
+.gc.done-gold .gn{color:rgba(255,215,0,.8)}
+.gc.done-silver .gn{color:rgba(200,200,200,.8)}
+.gc.done-none .gn{color:rgba(255,120,120,.8)}
+.gs{font-family:'Montserrat',sans-serif;font-size:28px;font-weight:900;line-height:1}
+.gb{margin:.4rem 0 .28rem;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.gbf{height:100%;border-radius:3px;transition:width .6s}
+.gbf.gold{background:#FFD700}
+.gbf.silver{background:#C0C0C0}
+.gbf.none{background:#FF3355}
+.gu{font-size:11px;color:rgba(255,255,255,.32)}
+.gpts{font-size:12px;font-weight:800;margin-top:.3rem}
+.gc.done-gold .gpts{color:#FFD700}
+.gc.done-silver .gpts{color:#C0C0C0}
+.gc.done-none .gpts{color:#FF9090}
+.gst{font-size:11px;font-weight:700;color:rgba(255,255,255,.22)}
+
+.wd::after{content:'...';animation:d 1.2s infinite}
+@keyframes d{0%{content:'.'}33%{content:'..'}66%{content:'...'}100%{content:'.'}}
+
+/* ANSWERS TABLE */
+.ans-sec{margin-top:.9rem;display:none}
+.ans-sec.on{display:block}
+.atbl{width:100%;border-collapse:collapse;font-size:12px}
+.atbl th{background:rgba(255,255,255,.07);padding:7px 9px;text-align:left;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.05em;color:rgba(255,255,255,.45)}
+.atbl td{padding:7px 9px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;line-height:1.4;color:rgba(255,255,255,.75)}
+.atbl tr:last-child td{border-bottom:none}
+.cb{display:inline-block;background:rgba(123,255,94,.13);color:#7BFF5E;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700}
+.sec-badge{display:inline-block;background:rgba(255,255,255,.1);border-radius:4px;padding:1px 7px;font-size:10px;color:rgba(255,255,255,.5);margin-right:4px}
+
+.foot{margin-top:.9rem;text-align:center;font-size:11px;color:rgba(255,255,255,.22)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="logo">kah<span>oo</span>t! <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.38)">Panel del Profesor</span></div>
+    <div class="lsub">Marbury v. Madison · Introducción al Derecho · Prof. Talavera Cano · Sección C</div>
+  </div>
+  <div class="hbtns">
+    <div class="live"><div class="dot"></div><div class="lv">EN VIVO</div></div>
+    <button class="hbtn ref" onclick="load()">↻ Actualizar</button>
+    <button class="hbtn rst" onclick="resetAll()">🗑 Reiniciar todo</button>
+  </div>
+</div>
+
+<!-- Rubric legend -->
+<div class="rubric-legend">
+  <div class="rl gold"><span class="pts">+2 pts</span>7–8 correctas · PC 3</div>
+  <div class="rl silver"><span class="pts">+1 pt</span>4–6 correctas · PC 3</div>
+  <div class="rl none"><span class="pts">+0 pts</span>0–3 correctas · PC 3</div>
+</div>
+
+<!-- Status bar -->
+<div class="statusbar">
+  <div class="sb-item"><div class="sb-val" id="sDone">0/6</div><div class="sb-lbl">Grupos completados</div></div>
+  <div class="sb-item"><div class="sb-val gold" id="sGold">0</div><div class="sb-lbl">Grupos con +2 pts</div></div>
+  <div class="sb-item"><div class="sb-val" style="color:#C0C0C0" id="sSilver">0</div><div class="sb-lbl">Grupos con +1 pt</div></div>
+  <div class="sb-item"><div class="sb-val" style="color:#FF9090" id="sNone">0</div><div class="sb-lbl">Grupos con +0 pts</div></div>
+</div>
+
+<div class="stl">RESULTADOS POR GRUPO</div>
+<div class="gg" id="gg"></div>
+
+<div class="ans-sec" id="ansSec">
+  <div class="stl" style="margin-top:.9rem">SOLUCIONARIO COMPLETO</div>
+  <table class="atbl">
+    <thead><tr><th>#</th><th>Sección</th><th>Respuesta correcta</th><th>Explicación</th></tr></thead>
+    <tbody id="atbody"></tbody>
+  </table>
+</div>
+
+<div class="foot">Actualización automática cada 5 segundos · Cada grupo juega una sola vez</div>
+
+<script>
+const FB = "https://kahoot-marbury-junio-default-rtdb.firebaseio.com";
+const NUM_GROUPS = 6;
+const TOTAL_Q = 8;
+const EMOJIS = ['🔴','🔵','🟡','🟢','🟣','🟠'];
+
+const QS = [
+  {sec:"V/F", cor:"Falso", exp:"El pedido ocurrió durante la presidencia de Jefferson, no Adams."},
+  {sec:"V/F", cor:"Falso", exp:"En Marbury v. Madison SÍ se estableció el control de constitucionalidad (judicial review)."},
+  {sec:"V/F", cor:"Falso", exp:"Marshall estableció la supremacía constitucional: la Constitución está por encima de toda ley ordinaria."},
+  {sec:"V/F", cor:"Falso", exp:"La Corte declaró NO tener competencia en primera instancia. El pedido de Marbury fue rechazado."},
+  {sec:"V/F", cor:"Verdadero", exp:"Ironía histórica: Marshall, siendo Secretario de Estado, no envió los nombramientos a tiempo y luego falló el caso."},
+  {sec:"Relación", cor:"(c) — Enunciado de la Pregunta 1", exp:"El Sr. Marbury fue válidamente nombrado desde que el acta fue firmada y sellada. La negativa menoscaba un derecho legalmente adquirido."},
+  {sec:"Relación", cor:"(a) — Enunciado de la Pregunta 2", exp:"Donde la Ley asigna una obligación específica y los derechos individuales dependen de ella, los ciudadanos tienen acción en justicia."},
+  {sec:"Relación", cor:"(b) — Enunciado de la Pregunta 3", exp:"La Corte no tiene competencia en primera instancia. Toda Ley contraria a la Constitución es nula. El pedido de Marbury es rechazado."},
+];
+
+function rubricTier(score) {
+  if (score >= 7) return 'gold';
+  if (score >= 4) return 'silver';
+  return 'none';
+}
+function rubricPts(score) {
+  if (score >= 7) return '+2 pts PC 3';
+  if (score >= 4) return '+1 pt PC 3';
+  return '+0 pts PC 3';
+}
+function rubricLabel(score) {
+  if (score >= 7) return '🏆 +2 pts PC 3';
+  if (score >= 4) return '⚖️ +1 pt PC 3';
+  return '📖 +0 pts PC 3';
+}
+
+async function load() {
+  let data = {};
+  try {
+    const r = await fetch(FB + "/grupos.json");
+    data = (await r.json()) || {};
+  } catch(e) {}
+  render(data);
+}
+
+function render(data) {
+  let doneCount = 0, goldCount = 0, silverCount = 0, noneCount = 0;
+
+  const gg = document.getElementById('gg');
+  gg.innerHTML = '';
+
+  for (let i = 1; i <= NUM_GROUPS; i++) {
+    const d = data['g' + i];
+    const done = d && d.done;
+    const tier = done ? rubricTier(d.score) : null;
+    if (done) { doneCount++; if (tier==='gold') goldCount++; else if (tier==='silver') silverCount++; else noneCount++; }
+
+    const c = document.createElement('div');
+    c.className = 'gc' + (done ? ' done-' + tier : '');
+
+    if (done) {
+      const pct = Math.round(d.score / TOTAL_Q * 100);
+      c.innerHTML = `
+        <div class="gn">${EMOJIS[i-1]} GRUPO ${i}</div>
+        <div class="gs">${d.score}<span style="font-size:13px;font-weight:600;color:rgba(255,255,255,.3)">/${TOTAL_Q}</span></div>
+        <div class="gb"><div class="gbf ${tier}" style="width:${pct}%"></div></div>
+        <div class="gu">${pct}% de acierto</div>
+        <div class="gpts">${rubricLabel(d.score)}</div>`;
+    } else {
+      c.innerHTML = `
+        <div class="gn">${EMOJIS[i-1]} GRUPO ${i}</div>
+        <div class="gs" style="font-size:22px;color:rgba(255,255,255,.16)">—</div>
+        <div class="gb"><div class="gbf gold" style="width:0%"></div></div>
+        <div class="gu" style="color:rgba(255,255,255,.2)">Sin datos aún</div>
+        <div class="gst">⏳ Esperando<span class="wd"></span></div>`;
+    }
+    gg.appendChild(c);
+  }
+
+  document.getElementById('sDone').textContent = doneCount + '/' + NUM_GROUPS;
+  document.getElementById('sGold').textContent = goldCount;
+  document.getElementById('sSilver').textContent = silverCount;
+  document.getElementById('sNone').textContent = noneCount;
+
+  // Show answers when all done
+  if (doneCount >= NUM_GROUPS) {
+    document.getElementById('ansSec').classList.add('on');
+    const tb = document.getElementById('atbody');
+    tb.innerHTML = '';
+    QS.forEach((q, i) => {
+      tb.innerHTML += `<tr>
+        <td style="font-weight:800;color:rgba(255,255,255,.4)">${i+1}</td>
+        <td><span class="sec-badge">${q.sec}</span></td>
+        <td><span class="cb">✓</span> ${q.cor}</td>
+        <td>${q.exp}</td>
+      </tr>`;
+    });
+  } else {
+    document.getElementById('ansSec').classList.remove('on');
+  }
+}
+
+async function resetAll() {
+  if (!confirm('¿Borrar todos los puntajes del salón? Esta acción no se puede deshacer.\n\nLos grupos podrán volver a jugar desde cero.')) return;
+  try {
+    await fetch(FB + "/grupos.json", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: "{}"
+    });
+  } catch(e) {}
+  load();
+}
+
+load();
+setInterval(load, 5000);
+</script>
+</body>
+</html>
